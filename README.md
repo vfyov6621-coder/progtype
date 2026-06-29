@@ -77,11 +77,24 @@ GitHub Pages — только статика. Данные и авторизац
 5. **Firestore → Rules** — вставить содержимое `firestore.rules` и нажать Publish
    (или выполнить `firebase deploy --only firestore:rules` локально с Firebase CLI)
 
+### Важно: проект `kres-portfolio` общий с другим приложением
+
+В проекте `kres-portfolio` уже работает другое приложение (Kres portfolio) со
+своими коллекциями (`users`, `usernames`, `portfolio`, `analytics`, `viewers`,
+`settings`, `messages`). Правила в `firestore.rules` учитывают это:
+
+- krestype использует **только** коллекцию `/articles/{slug}`
+- Админ krestype определяется по **email** `kres@krestype.app` (через
+  `request.auth.token.email`), НЕ через `/users/{uid}.isAdmin`
+- Существующие правила для портфолио сохранены без изменений
+- Никакого catch-all `match /{document=**}` нет — другие коллекции работают
+  по своим правилам, как и раньше
+
 Деплой Firestore rules через Firebase CLI (опционально, только когда меняете правила):
 ```bash
 npm install -g firebase-tools
 firebase login
-firebase deploy --only firestore:rules,firestore:indexes
+firebase deploy --only firestore:rules
 ```
 
 ## Деплой на GitHub Pages (автоматически)
