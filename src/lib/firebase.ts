@@ -16,9 +16,11 @@ export const firebaseConfig = {
   measurementId: "G-7RTLV6Y9DW",
 };
 
-// Admin email — должен быть создан вручную в Firebase Console → Authentication → Add user
-// Email: kres@krestype.app
-// Пароль: 190565
+// Admin email — создаётся вручную в Firebase Console → Authentication → Add user.
+// Пароль нигде в коде не хранится — он вводится пользователем при входе
+// и напрямую передаётся в Firebase Auth (никогда не логируется и не сохраняется).
+// Чтобы сменить email или пароль, поменяйте ADMIN_EMAIL здесь + обновите
+// Firestore Rules (isKrestypeAdmin) + создайте/обновите юзера в Firebase Console.
 export const ADMIN_EMAIL = "kres@krestype.app";
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);

@@ -71,8 +71,8 @@ GitHub Pages — только статика. Данные и авторизац
 1. Зайти в [Firebase Console](https://console.firebase.google.com) → проект `kres-portfolio`
 2. **Authentication → Sign-in method → Email/Password → Enable**
 3. **Authentication → Users → Add user**:
-   - Email: `kres@krestype.app`
-   - Password: `190565`
+   - Email: `kres@krestype.app` (или любой другой — см. ниже «Как сменить логин/пароль»)
+   - Password: придумайте надёжный пароль (не хранится в репозитории)
 4. **Firestore Database → Create database** (production mode, любой регион)
 5. **Firestore → Rules** — вставить содержимое `firestore.rules` и нажать Publish
    (или выполнить `firebase deploy --only firestore:rules` локально с Firebase CLI)
@@ -96,6 +96,26 @@ npm install -g firebase-tools
 firebase login
 firebase deploy --only firestore:rules
 ```
+
+## Как сменить логин или пароль админа
+
+Пароль **вообще нигде не хранится** в коде — он вводится при входе и напрямую
+проверяется Firebase Auth. Email хранится в двух местах и должен совпадать:
+
+### Если хотите сменить только пароль
+
+1. Firebase Console → Authentication → Users → найдите `kres@krestype.app`
+2. → "Reset password" или "⋮" → "Reset password"
+3. Введите новый пароль
+4. Готово — ничего в коде менять не нужно
+
+### Если хотите сменить email
+
+1. Firebase Console → Authentication → Users → удалите старый `kres@krestype.app`
+2. Add user → создайте новый email + пароль
+3. В `src/lib/firebase.ts` поменяйте `ADMIN_EMAIL` на новый email
+4. В `firestore.rules` поменяйте `isKrestypeAdmin()` — замените `'kres@krestype.app'` на новый email
+5. Запушьте — GitHub Actions сам пересоберёт и задеплоит сайт
 
 ## Деплой на GitHub Pages (автоматически)
 
